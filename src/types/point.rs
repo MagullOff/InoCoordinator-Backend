@@ -15,4 +15,5 @@ pub struct Point {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct NewPoint {
     pub name: String,
+    pub event_id: Uuid,
 }

@@ -1,2 +1,3 @@
 pub mod organizer;
-pub mod authorization;
+pub mod event;
+pub mod point;

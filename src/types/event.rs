@@ -13,6 +13,5 @@ pub struct Event {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct NewEvent {
-    pub organizer_id: Uuid,
     pub name: String,
 }

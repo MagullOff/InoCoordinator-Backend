@@ -1,5 +1,5 @@
 use crate::repos::OrganizerRepo;
-use crate::types::{Organizer, token::OrganizerToken};
+use crate::types::Organizer;
 use crate::types::organizer::NewOrganizer;
 use uuid::Uuid;
 use crate::Errors;
@@ -15,4 +15,8 @@ pub fn add_organizer(new_organizer: NewOrganizer, conn: &PgConnection) -> Result
         access_code: (rng.gen::<f64>() * 1000000.0) as i32
     };
     OrganizerRepo::insert(organizer, conn)
+}
+
+pub fn get_by_id(id: Uuid, conn: &PgConnection) -> Result<Organizer, Errors> {
+    OrganizerRepo::get_by_id(id, conn)
 }
