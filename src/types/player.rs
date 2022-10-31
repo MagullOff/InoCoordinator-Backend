@@ -8,8 +8,8 @@ use uuid::Uuid;
 pub struct Player {
     pub id: Uuid,
     pub event_id: Uuid,
-    pub name: String,
     pub access_code: i32,
+    pub name: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]

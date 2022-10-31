@@ -19,6 +19,13 @@ pub fn get_by_player(player_id: Uuid, conn: &PgConnection) -> Result<Vec<Capture
             .map_err(|_| Errors::QueryFailed)
 }
 
+pub fn get_by_point(point_id: Uuid, conn: &PgConnection) -> Result<Vec<Capture>, Errors> {
+    captures::table
+            .filter(captures::point_id.eq(point_id))
+            .load::<Capture>(conn)
+            .map_err(|_| Errors::QueryFailed)
+}
+
 pub fn insert(capture: Capture, conn: &PgConnection) -> Result<Capture, Errors> {
     diesel::insert_into(captures::table)
         .values(capture)

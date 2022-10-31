@@ -1,6 +1,5 @@
 use crate::api::DbConn;
 use crate::types::Point;
-use crate::types::token::OrganizerToken;
 use crate::services::point;
 use rocket::response::status;
 use rocket::serde::json::Json;

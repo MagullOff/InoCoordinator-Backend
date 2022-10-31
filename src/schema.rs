@@ -5,7 +5,7 @@ diesel::table! {
         id -> Uuid,
         player_id -> Uuid,
         point_id -> Uuid,
-        date -> Date,
+        date -> Timestamp,
     }
 }
 
@@ -30,8 +30,8 @@ diesel::table! {
     players (id) {
         id -> Uuid,
         event_id -> Uuid,
-        name -> Varchar,
         access_code -> Int4,
+        name -> Varchar,
     }
 }
 

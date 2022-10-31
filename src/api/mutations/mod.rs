@@ -11,7 +11,8 @@ pub fn get_routes() -> Vec<Route> {
         organizer::get_routes(),
         player::get_routes(),
         event::get_routes(),
-        capture::get_routes()
+        capture::get_routes(),
+        point::get_routes()
     ]
     .into_iter()
     .flatten()

@@ -12,6 +12,13 @@ pub fn get_by_id(id: Uuid, conn: &PgConnection) -> Result<Point, Errors> {
         .map_err(|_| Errors::QueryFailed)
 }
 
+pub fn get_by_code(code: String, conn: &PgConnection) -> Result<Point, Errors> {
+    points::table
+        .filter(points::code.eq_all(code))
+        .first::<Point>(conn)
+        .map_err(|_| Errors::QueryFailed)
+}
+
 pub fn get_by_event(event_id: Uuid, conn: &PgConnection) -> Result<Vec<Point>,Errors> {
     points::table
             .filter(points::event_id.eq(event_id))

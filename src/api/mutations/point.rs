@@ -8,7 +8,7 @@ use rocket::serde::json::Json;
 use rocket::{routes, Route};
 
 #[post("/point", format="application/json", data="<body>", rank=1)]
-async fn add_event(
+async fn add_point(
     conn: DbConn,
     token: OrganizerToken,
     body: Json<NewPoint>
@@ -28,5 +28,5 @@ async fn add_event(
 }
 
 pub fn get_routes() -> Vec<Route> {
-    routes![add_event]
+    routes![add_point]
 }

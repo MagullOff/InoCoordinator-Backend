@@ -3,6 +3,7 @@ pub mod event;
 pub mod player;
 pub mod point;
 pub mod capture;
+pub mod stats;
 pub mod token;
 
 pub use organizer::Organizer;
