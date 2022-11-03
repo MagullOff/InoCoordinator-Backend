@@ -10,13 +10,13 @@ pub fn get_player_stats(player_id: Uuid, conn: &PgConnection) -> Result<PlayerSt
     let player_stats = captures
         .into_iter()
         .map(|capture| {
-            let point = PointRepo::get_by_id(capture.point_id, conn).unwrap();
-            PlayerPointStats {
+            let point = PointRepo::get_by_id(capture.point_id, conn)?;
+            Ok(PlayerPointStats {
                 name: point.name,
                 date: capture.date
-            }
+            })
         })
-        .collect::<Vec<PlayerPointStats>>();
+        .collect::<Result<Vec<PlayerPointStats>, Errors>>()?;
         
     Ok(PlayerStats{
         name: player.name,
@@ -31,19 +31,19 @@ pub fn get_event_stats(event_id: Uuid, conn: &PgConnection) -> Result<EventStats
     let point_stats = points
         .into_iter()
         .map(|point| {
-            let pass_list = CaptureRepo::get_by_point(point.id, conn).unwrap();
+            let pass_list = CaptureRepo::get_by_point(point.id, conn)?;
             let name_pass_list = pass_list
                 .into_iter()
                 .map(|capture| {
-                    PlayerRepo::get_by_id(capture.player_id, conn).unwrap().name
+                    PlayerRepo::get_by_id(capture.player_id, conn).map(|c| c.name)
                 })
-                .collect::<Vec<String>>();
-            PointStat {
+                .collect::<Result<Vec<String>,Errors>>()?;
+            Ok(PointStat {
                 name: point.name,
                 pass_list: name_pass_list
-            }
+            })
         })
-        .collect::<Vec<PointStat>>();
+        .collect::<Result<Vec<PointStat>,Errors>>()?;
 
     Ok(EventStats {
         name: event.name,
