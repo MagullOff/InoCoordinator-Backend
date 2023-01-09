@@ -17,3 +17,8 @@ pub struct NewPlayer {
     pub event_id: Uuid,
     pub name: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct LoginPlayer {
+    pub code: String,
+}

@@ -8,8 +8,8 @@ use uuid::Uuid;
 pub struct Point {
     pub id: Uuid,
     pub event_id: Uuid,
-    pub name: String,
     pub code: String,
+    pub name: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]

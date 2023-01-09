@@ -6,28 +6,22 @@ use uuid::Uuid;
 
 pub fn get_player_stats(player_id: Uuid, conn: &PgConnection) -> Result<PlayerStats, Errors> {
     let player = PlayerRepo::get_by_id(player_id, conn)?;
-    let player_captures = CaptureRepo::get_by_player(player_id, conn)?;
+    let captures = CaptureRepo::get_by_player(player_id, conn)?;
     let points = PointRepo::get_by_event(player.event_id, conn)?;
-    let player_amout = PlayerRepo::get_by_event(player.event_id, conn)?.len();
-    let capture_percentage = (player_captures.len() * 100 / points.len()) as i32;
-    let event = EventRepo::get_by_id(player.event_id, conn)?;
 
     let player_stats = points
         .into_iter()
         .map(|point| {
-            let capture = player_captures.iter().find(|c| c.point_id == point.id);
-            let capture_amount = CaptureRepo::get_by_point(point.id, conn)?.len();
+            let capture = captures.iter().find(|c| c.point_id == point.id);
             Ok(PlayerPointStats {
-                capture_percentage: (capture_amount * 100 / player_amout) as i32,
-                name: point.name.clone(),
+                name: point.name,
                 date: capture.map(|c| c.date),
             })
         })
         .collect::<Result<Vec<PlayerPointStats>, Errors>>()?;
 
     Ok(PlayerStats {
-        capture_percentage,
-        name: event.name,
+        name: player.name,
         point_stats: player_stats,
     })
 }

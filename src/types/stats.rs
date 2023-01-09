@@ -5,7 +5,7 @@ use rocket::serde::{Deserialize, Serialize};
 pub struct EventStats {
     pub name: String,
     pub player_amount: i32,
-    pub point_stats: Vec<PointStat>
+    pub point_stats: Vec<PointStat>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -17,11 +17,13 @@ pub struct PointStat {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct PlayerStats {
     pub name: String,
-    pub point_stats: Vec<PlayerPointStats>
+    pub capture_percentage: i32,
+    pub point_stats: Vec<PlayerPointStats>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct PlayerPointStats {
     pub name: String,
-    pub date: NaiveDateTime
+    pub capture_percentage: i32,
+    pub date: Option<NaiveDateTime>,
 }

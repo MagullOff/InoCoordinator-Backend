@@ -9,11 +9,16 @@ pub struct Organizer {
     pub id: Uuid,
     pub name: String,
     pub access_code: i32,
-    pub email: String
+    pub email: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct NewOrganizer {
     pub name: String,
-    pub email: String
+    pub email: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct LoginOrganizer {
+    pub code: String,
 }
