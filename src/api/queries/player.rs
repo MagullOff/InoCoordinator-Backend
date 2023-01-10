@@ -5,9 +5,13 @@ use crate::types::Player;
 use rocket::response::status;
 use rocket::serde::json::Json;
 use rocket::{routes, Route};
+use rocket_okapi::okapi::openapi3::OpenApi;
+use rocket_okapi::settings::OpenApiSettings;
+use rocket_okapi::{openapi, openapi_get_routes_spec};
 use uuid::Uuid;
 
-#[get("/player/event/<id_string>", rank = 2)]
+#[openapi]
+#[get("/event/<id_string>", rank = 2)]
 async fn get_by_event(
     id_string: String,
     token: OrganizerToken,
@@ -27,7 +31,8 @@ async fn get_by_event(
     .await
 }
 
-#[get("/player/me", rank = 1)]
+#[openapi]
+#[get("/me", rank = 1)]
 async fn player_me(
     conn: DbConn,
     token: PlayerToken,
@@ -41,6 +46,6 @@ async fn player_me(
     .await
 }
 
-pub fn get_routes() -> Vec<Route> {
-    routes![player_me, get_by_event]
+pub fn get_routes(settings: &OpenApiSettings) -> (Vec<Route>, OpenApi) {
+    openapi_get_routes_spec![settings: player_me, get_by_event]
 }

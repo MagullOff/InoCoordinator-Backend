@@ -6,8 +6,12 @@ use crate::types::Player;
 use rocket::response::status;
 use rocket::serde::json::Json;
 use rocket::{routes, Route};
+use rocket_okapi::okapi::openapi3::OpenApi;
+use rocket_okapi::settings::OpenApiSettings;
+use rocket_okapi::{openapi, openapi_get_routes_spec};
 
-#[post("/player", format = "application/json", data = "<body>", rank = 1)]
+#[openapi]
+#[post("/", format = "application/json", data = "<body>", rank = 1)]
 async fn add_player(
     conn: DbConn,
     token: OrganizerToken,
@@ -28,12 +32,8 @@ async fn add_player(
     .await
 }
 
-#[post(
-    "/player/login",
-    format = "application/json",
-    data = "<body>",
-    rank = 1
-)]
+#[openapi]
+#[post("/login", format = "application/json", data = "<body>", rank = 1)]
 async fn player_login(
     conn: DbConn,
     body: Json<LoginPlayer>,
@@ -51,6 +51,6 @@ async fn player_login(
     .await
 }
 
-pub fn get_routes() -> Vec<Route> {
-    routes![add_player, player_login]
+pub fn get_routes(settings: &OpenApiSettings) -> (Vec<Route>, OpenApi) {
+    openapi_get_routes_spec![settings: add_player, player_login]
 }

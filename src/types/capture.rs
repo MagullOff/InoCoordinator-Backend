@@ -1,10 +1,11 @@
 use crate::schema::captures;
-use diesel::{self, Queryable};
 use chrono::NaiveDateTime;
+use diesel::{self, Queryable};
 use rocket::serde::{Deserialize, Serialize};
+use rocket_okapi::JsonSchema;
 use uuid::Uuid;
 
-#[derive(Queryable, Insertable, Debug, Deserialize, Serialize, Clone)]
+#[derive(JsonSchema, Queryable, Insertable, Debug, Deserialize, Serialize, Clone)]
 #[table_name = "captures"]
 pub struct Capture {
     pub id: Uuid,
@@ -12,4 +13,3 @@ pub struct Capture {
     pub point_id: Uuid,
     pub date: NaiveDateTime,
 }
-

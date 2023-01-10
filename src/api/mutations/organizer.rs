@@ -5,13 +5,12 @@ use crate::types::Organizer;
 use rocket::response::status;
 use rocket::serde::json::Json;
 use rocket::{routes, Route};
+use rocket_okapi::okapi::openapi3::OpenApi;
+use rocket_okapi::settings::OpenApiSettings;
+use rocket_okapi::{openapi, openapi_get_routes_spec};
 
-#[post(
-    "/organizer/add",
-    format = "application/json",
-    data = "<body>",
-    rank = 1
-)]
+#[openapi]
+#[post("/add", format = "application/json", data = "<body>", rank = 1)]
 async fn add_organizer(
     conn: DbConn,
     body: Json<NewOrganizer>,
@@ -25,12 +24,8 @@ async fn add_organizer(
     .await
 }
 
-#[post(
-    "/organizer/login",
-    format = "application/json",
-    data = "<body>",
-    rank = 1
-)]
+#[openapi]
+#[post("/login", format = "application/json", data = "<body>", rank = 1)]
 async fn organizer_login(
     conn: DbConn,
     body: Json<LoginOrganizer>,
@@ -48,6 +43,6 @@ async fn organizer_login(
     .await
 }
 
-pub fn get_routes() -> Vec<Route> {
-    routes![add_organizer, organizer_login]
+pub fn get_routes(settings: &OpenApiSettings) -> (Vec<Route>, OpenApi) {
+    openapi_get_routes_spec![settings: add_organizer, organizer_login]
 }

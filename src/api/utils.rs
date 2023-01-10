@@ -15,9 +15,9 @@ impl<'r> FromRequest<'r> for OrganizerToken {
             Some(t) => {
                 let parts = t.split("@").collect::<Vec<&str>>();
                 match parts.len() {
-                    2 => Outcome::Success(OrganizerToken{
+                    2 => Outcome::Success(OrganizerToken {
                         id: uuid::Uuid::parse_str(parts[0]).unwrap(),
-                        access_code: parts[1].parse().unwrap_or(0)
+                        access_code: parts[1].parse().unwrap_or(0),
                     }),
                     _ => Outcome::Failure((Status::BadRequest, Errors::Unauthorized)),
                 }
@@ -39,7 +39,7 @@ impl<'r> FromRequest<'r> for PlayerToken {
                 match parts.len() {
                     2 => Outcome::Success(PlayerToken {
                         id: uuid::Uuid::parse_str(parts[0]).unwrap(),
-                        access_code: parts[1].parse().unwrap_or(0)
+                        access_code: parts[1].parse().unwrap_or(0),
                     }),
                     _ => Outcome::Failure((Status::BadRequest, Errors::Unauthorized)),
                 }
@@ -48,3 +48,27 @@ impl<'r> FromRequest<'r> for PlayerToken {
     }
 }
 
+use rocket_okapi::gen::OpenApiGenerator;
+use rocket_okapi::request::{OpenApiFromRequest, RequestHeaderInput};
+
+impl<'r> OpenApiFromRequest<'r> for OrganizerToken {
+    fn from_request_input(
+        _gen: &mut OpenApiGenerator,
+        _name: String,
+        _required: bool,
+    ) -> rocket_okapi::Result<RequestHeaderInput> {
+        //TODO: Authorization header
+        Ok(RequestHeaderInput::None)
+    }
+}
+
+impl<'r> OpenApiFromRequest<'r> for PlayerToken {
+    fn from_request_input(
+        _gen: &mut OpenApiGenerator,
+        _name: String,
+        _required: bool,
+    ) -> rocket_okapi::Result<RequestHeaderInput> {
+        //TODO: Authorization header
+        Ok(RequestHeaderInput::None)
+    }
+}

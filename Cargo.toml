@@ -17,6 +17,9 @@ rocket_cors = { git = "https://github.com/lawliet89/rocket_cors", branch = "mast
 async-trait = "0.1.57"
 rand = "0.8.5"
 random-string = "1.0.0"
+schemars = {version="0.8.10", features = ["chrono", "uuid08"]}
+okapi = { version = "0.7.0-rc.1" }
+rocket_okapi = { version = "0.8.0-rc.2", features = ["swagger","rapidoc", "rocket_db_pools"] }
 
 [dependencies.rocket_sync_db_pools]
 version = "0.1.0-rc.2"

@@ -1,9 +1,10 @@
 use crate::schema::points;
 use diesel::{self, Queryable};
 use rocket::serde::{Deserialize, Serialize};
+use rocket_okapi::JsonSchema;
 use uuid::Uuid;
 
-#[derive(Queryable, Insertable, Debug, Deserialize, Serialize, Clone)]
+#[derive(JsonSchema, Queryable, Insertable, Debug, Deserialize, Serialize, Clone)]
 #[table_name = "points"]
 pub struct Point {
     pub id: Uuid,
@@ -12,7 +13,7 @@ pub struct Point {
     pub name: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(JsonSchema, Debug, Deserialize, Serialize, Clone)]
 pub struct NewPoint {
     pub name: String,
     pub event_id: Uuid,

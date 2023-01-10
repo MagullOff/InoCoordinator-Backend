@@ -1,17 +1,17 @@
-use uuid::Uuid;
-use rocket::response::status;
 use crate::repos::{OrganizerRepo, PlayerRepo};
 use crate::types::{Organizer, Player};
 use diesel::PgConnection;
+use rocket::response::status;
+use uuid::Uuid;
 
-pub struct OrganizerToken{
+pub struct OrganizerToken {
     pub id: Uuid,
-    pub access_code: i32
+    pub access_code: i32,
 }
 
-pub struct PlayerToken{
+pub struct PlayerToken {
     pub id: Uuid,
-    pub access_code: i32
+    pub access_code: i32,
 }
 
 impl OrganizerToken {
@@ -23,8 +23,8 @@ impl OrganizerToken {
                 } else {
                     Err(status::BadRequest(None))
                 }
-            },
-            Err(_) => Err(status::BadRequest(None))
+            }
+            Err(_) => Err(status::BadRequest(None)),
         }
     }
 }
@@ -38,8 +38,8 @@ impl PlayerToken {
                 } else {
                     Err(status::BadRequest(None))
                 }
-            },
-            Err(_) => Err(status::BadRequest(None))
+            }
+            Err(_) => Err(status::BadRequest(None)),
         }
     }
 }
