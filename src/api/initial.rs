@@ -8,13 +8,13 @@ use rocket::figment::{
     value::{Map, Value},
 };
 use rocket::http::Method;
-use rocket::{Rocket, Route};
+use rocket::{Rocket};
 use rocket_cors::{AllowedOrigins, CorsOptions};
 use rocket_okapi::rapidoc::*;
 use rocket_okapi::request::OpenApiFromRequest;
 use rocket_okapi::settings::UrlObject;
 use rocket_okapi::swagger_ui::{make_swagger_ui, SwaggerUIConfig};
-use rocket_okapi::{mount_endpoints_and_merged_docs, openapi_get_routes};
+use rocket_okapi::{mount_endpoints_and_merged_docs};
 use rocket_sync_db_pools::{database, diesel};
 
 #[derive(OpenApiFromRequest)]
