@@ -12,7 +12,7 @@ pub fn add_player(new_player: NewPlayer, conn: &PgConnection) -> Result<Player, 
         id: Uuid::new_v4(),
         name: new_player.name,
         event_id: new_player.event_id,
-        access_code: ((rng.gen::<f64>() * 0.9 + 0.1) * 1000000.0) as i32,
+        access_code: ((rng.gen::<f64>() * 0.9 + 0.1) * 10000000.0) as i32,
     };
     PlayerRepo::insert(player, conn)
 }
