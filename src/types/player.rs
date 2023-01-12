@@ -15,7 +15,6 @@ pub struct Player {
 
 #[derive(JsonSchema, Debug, Deserialize, Serialize, Clone)]
 pub struct NewPlayer {
-    pub event_id: Uuid,
     pub name: String,
 }
 

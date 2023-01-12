@@ -6,12 +6,16 @@ use diesel::PgConnection;
 use rand::Rng;
 use uuid::Uuid;
 
-pub fn add_player(new_player: NewPlayer, conn: &PgConnection) -> Result<Player, Errors> {
+pub fn add_player(
+    new_player: NewPlayer,
+    event_id: Uuid,
+    conn: &PgConnection,
+) -> Result<Player, Errors> {
     let mut rng = rand::thread_rng();
     let player = Player {
         id: Uuid::new_v4(),
         name: new_player.name,
-        event_id: new_player.event_id,
+        event_id,
         access_code: ((rng.gen::<f64>() * 0.9 + 0.1) * 1000000.0) as i32,
     };
     PlayerRepo::insert(player, conn)
