@@ -15,7 +15,7 @@ pub fn add_organizer(
         id: Uuid::new_v4(),
         name: new_organizer.name,
         email: new_organizer.email,
-        access_code: ((rng.gen::<f64>() * 0.9 + 0.1) * 10000000.0) as i32,
+        access_code: ((rng.gen::<f64>() * 0.9 + 0.1) * 1000000.0) as i32,
     };
     OrganizerRepo::insert(organizer, conn)
 }
