@@ -11,7 +11,7 @@ use rocket_okapi::settings::OpenApiSettings;
 use rocket_okapi::{openapi, openapi_get_routes_spec};
 
 #[openapi]
-#[post("/add/<point_code>", rank = 1)]
+#[post("/<point_code>", rank = 1)]
 async fn add_capture(
     point_code: String,
     conn: DbConn,

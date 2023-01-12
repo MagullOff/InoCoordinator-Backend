@@ -1,5 +1,6 @@
 use crate::types::token::{OrganizerToken, PlayerToken};
 use crate::Errors;
+use okapi::openapi3::{Object, SecurityRequirement, SecurityScheme, SecuritySchemeData};
 use rocket::request::{FromRequest, Outcome, Request};
 
 use rocket::http::Status;
@@ -57,8 +58,24 @@ impl<'r> OpenApiFromRequest<'r> for OrganizerToken {
         _name: String,
         _required: bool,
     ) -> rocket_okapi::Result<RequestHeaderInput> {
-        //TODO: Authorization header
-        Ok(RequestHeaderInput::None)
+        let security_scheme = SecurityScheme {
+            description: Some(
+                "Requires an Organizer token to access. Token format is organizer-id@passcode"
+                    .to_owned(),
+            ),
+            data: SecuritySchemeData::Http {
+                scheme: "Organizer".to_owned(),
+                bearer_format: Some("Organizer".to_owned()),
+            },
+            extensions: Object::default(),
+        };
+        let mut security_req = SecurityRequirement::new();
+        security_req.insert("Authorization".to_owned(), Vec::new());
+        Ok(RequestHeaderInput::Security(
+            "Authorization".to_owned(),
+            security_scheme,
+            security_req,
+        ))
     }
 }
 
@@ -68,7 +85,22 @@ impl<'r> OpenApiFromRequest<'r> for PlayerToken {
         _name: String,
         _required: bool,
     ) -> rocket_okapi::Result<RequestHeaderInput> {
-        //TODO: Authorization header
-        Ok(RequestHeaderInput::None)
+        let security_scheme = SecurityScheme {
+            description: Some(
+                "Requires a Player token to access. Token format is player-id@passcode".to_owned(),
+            ),
+            data: SecuritySchemeData::Http {
+                scheme: "bearer".to_owned(),
+                bearer_format: Some("@".to_owned()),
+            },
+            extensions: Object::default(),
+        };
+        let mut security_req = SecurityRequirement::new();
+        security_req.insert("Authorization".to_owned(), Vec::new());
+        Ok(RequestHeaderInput::Security(
+            "Authorization".to_owned(),
+            security_scheme,
+            security_req,
+        ))
     }
 }

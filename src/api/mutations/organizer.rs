@@ -4,7 +4,7 @@ use crate::types::organizer::{LoginOrganizer, NewOrganizer};
 use crate::types::Organizer;
 use rocket::response::status;
 use rocket::serde::json::Json;
-use rocket::{Route};
+use rocket::Route;
 use rocket_okapi::okapi::openapi3::OpenApi;
 use rocket_okapi::settings::OpenApiSettings;
 use rocket_okapi::{openapi, openapi_get_routes_spec};
