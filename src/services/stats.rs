@@ -9,7 +9,7 @@ pub fn get_player_stats(player_id: Uuid, conn: &PgConnection) -> Result<PlayerSt
     let player_captures = CaptureRepo::get_by_player(player_id, conn)?;
     let points = PointRepo::get_by_event(player.event_id, conn)?;
     let player_amout = PlayerRepo::get_by_event(player.event_id, conn)?.len();
-    let capture_percentage = (player_captures.len() * 100 / points.len()) as i32;
+    let capture_percentage = if points.len() > 0 {(player_captures.len() * 100 / points.len()) as i32} else {0};
     let event = EventRepo::get_by_id(player.event_id, conn)?;
 
     let player_stats = points

@@ -8,13 +8,11 @@ use rocket::figment::{
     value::{Map, Value},
 };
 use rocket::http::Method;
-use rocket::{Rocket};
+use rocket::Rocket;
 use rocket_cors::{AllowedOrigins, CorsOptions};
-use rocket_okapi::rapidoc::*;
+use rocket_okapi::mount_endpoints_and_merged_docs;
 use rocket_okapi::request::OpenApiFromRequest;
-use rocket_okapi::settings::UrlObject;
 use rocket_okapi::swagger_ui::{make_swagger_ui, SwaggerUIConfig};
-use rocket_okapi::{mount_endpoints_and_merged_docs};
 use rocket_sync_db_pools::{database, diesel};
 
 #[derive(OpenApiFromRequest)]
@@ -62,22 +60,6 @@ pub fn init_routes() -> Rocket<rocket::Build> {
             "/swagger-ui/",
             make_swagger_ui(&SwaggerUIConfig {
                 url: "../openapi.json".to_owned(),
-                ..Default::default()
-            }),
-        )
-        .mount(
-            "/rapidoc/",
-            make_rapidoc(&RapiDocConfig {
-                title: Some("My special documentation | RapiDoc".to_owned()),
-                general: GeneralConfig {
-                    spec_urls: vec![UrlObject::new("General", "../openapi.json")],
-                    ..Default::default()
-                },
-                hide_show: HideShowConfig {
-                    allow_spec_url_load: false,
-                    allow_spec_file_load: false,
-                    ..Default::default()
-                },
                 ..Default::default()
             }),
         );
