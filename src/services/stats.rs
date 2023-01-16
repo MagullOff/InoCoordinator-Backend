@@ -1,5 +1,5 @@
 use crate::repos::{CaptureRepo, EventRepo, PlayerRepo, PointRepo};
-use crate::types::stats::{EventStats, PlayerPointStats, PlayerStats, PointStat};
+use crate::types::stats::{EventStats, PlayerPointStats, PlayerStats};
 use crate::Errors;
 use diesel::PgConnection;
 use uuid::Uuid;
@@ -9,7 +9,11 @@ pub fn get_player_stats(player_id: Uuid, conn: &PgConnection) -> Result<PlayerSt
     let player_captures = CaptureRepo::get_by_player(player_id, conn)?;
     let points = PointRepo::get_by_event(player.event_id, conn)?;
     let player_amout = PlayerRepo::get_by_event(player.event_id, conn)?.len();
-    let capture_percentage = if points.len() > 0 {(player_captures.len() * 100 / points.len()) as i32} else {0};
+    let capture_percentage = if points.len() > 0 {
+        (player_captures.len() * 100 / points.len()) as i32
+    } else {
+        0
+    };
     let event = EventRepo::get_by_id(player.event_id, conn)?;
 
     let player_stats = points
@@ -34,26 +38,28 @@ pub fn get_player_stats(player_id: Uuid, conn: &PgConnection) -> Result<PlayerSt
 
 pub fn get_event_stats(event_id: Uuid, conn: &PgConnection) -> Result<EventStats, Errors> {
     let event = EventRepo::get_by_id(event_id, conn)?;
+    let players = PlayerRepo::get_by_event(event_id, conn)?;
     let points = PointRepo::get_by_event(event_id, conn)?;
-    let player_amount = PlayerRepo::get_by_event(event_id, conn)?.len() as i32;
-    let point_stats = points
+
+    let player_stats = players
         .into_iter()
-        .map(|point| {
-            let pass_list = CaptureRepo::get_by_point(point.id, conn)?;
-            let name_pass_list = pass_list
-                .into_iter()
-                .map(|capture| PlayerRepo::get_by_id(capture.player_id, conn).map(|c| c.name))
-                .collect::<Result<Vec<String>, Errors>>()?;
-            Ok(PointStat {
-                name: point.name,
-                pass_list: name_pass_list,
-            })
+        .map(|p| {
+            let player_captures = CaptureRepo::get_by_player(p.id, conn)?;
+            Ok((player_captures.len() * 100 / points.len()) as i32)
         })
-        .collect::<Result<Vec<PointStat>, Errors>>()?;
+        .collect::<Result<Vec<i32>, Errors>>()?;
 
     Ok(EventStats {
+        id: event_id,
         name: event.name,
-        player_amount,
-        point_stats,
+        completion_amount: player_stats.iter().filter(|i| **i == 100).count() as i32,
+        average_completion_amount: avg(&player_stats).unwrap_or(0),
     })
+}
+
+fn avg(vec: &Vec<i32>) -> Option<i32> {
+    match vec.len() as i32 {
+        0 => None,
+        l => Some(vec.iter().sum::<i32>() / l),
+    }
 }

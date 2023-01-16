@@ -1,18 +1,14 @@
 use chrono::NaiveDateTime;
 use rocket::serde::{Deserialize, Serialize};
 use rocket_okapi::JsonSchema;
+use uuid::Uuid;
 
 #[derive(JsonSchema, Debug, Deserialize, Serialize, Clone)]
 pub struct EventStats {
+    pub id: Uuid,
     pub name: String,
-    pub player_amount: i32,
-    pub point_stats: Vec<PointStat>,
-}
-
-#[derive(JsonSchema, Debug, Deserialize, Serialize, Clone)]
-pub struct PointStat {
-    pub name: String,
-    pub pass_list: Vec<String>,
+    pub completion_amount: i32,
+    pub average_completion_amount: i32,
 }
 
 #[derive(JsonSchema, Debug, Deserialize, Serialize, Clone)]
