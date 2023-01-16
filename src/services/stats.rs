@@ -45,7 +45,7 @@ pub fn get_event_stats(event_id: Uuid, conn: &PgConnection) -> Result<EventStats
         .into_iter()
         .map(|p| {
             let player_captures = CaptureRepo::get_by_player(p.id, conn)?;
-            Ok((player_captures.len() * 100 / points.len()) as i32)
+            Ok(if points.len()>0 {(player_captures.len() * 100 / points.len()) as i32} else {0})
         })
         .collect::<Result<Vec<i32>, Errors>>()?;
 
