@@ -39,20 +39,31 @@ pub fn get_player_stats(player_id: Uuid, conn: &PgConnection) -> Result<PlayerSt
 pub fn get_event_stats(event_id: Uuid, conn: &PgConnection) -> Result<EventStats, Errors> {
     let event = EventRepo::get_by_id(event_id, conn)?;
     let players = PlayerRepo::get_by_event(event_id, conn)?;
+    let player_number = players.len() as i32;
     let points = PointRepo::get_by_event(event_id, conn)?;
 
     let player_stats = players
         .into_iter()
         .map(|p| {
             let player_captures = CaptureRepo::get_by_player(p.id, conn)?;
-            Ok(if points.len()>0 {(player_captures.len() * 100 / points.len()) as i32} else {0})
+            Ok(if points.len() > 0 {
+                (player_captures.len() * 100 / points.len()) as i32
+            } else {
+                0
+            })
         })
         .collect::<Result<Vec<i32>, Errors>>()?;
 
+    let completion_number = player_stats.iter().filter(|i| **i == 100).count() as i32;
     Ok(EventStats {
         id: event_id,
         name: event.name,
-        completion_amount: player_stats.iter().filter(|i| **i == 100).count() as i32,
+        completion_amount: completion_number * 100
+            / if completion_number > 0 {
+                player_number
+            } else {
+                1
+            },
         average_completion_amount: avg(&player_stats).unwrap_or(0),
     })
 }
